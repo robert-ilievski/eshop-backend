@@ -1,13 +1,13 @@
-package com.systems.integrated.wineshopbackend.service.impl;
+package com.management.project.eshopbackend.service.impl;
 
-import com.systems.integrated.wineshopbackend.models.exceptions.EntityNotFoundException;
-import com.systems.integrated.wineshopbackend.models.products.Attribute;
-import com.systems.integrated.wineshopbackend.models.products.Category;
-import com.systems.integrated.wineshopbackend.models.products.DTO.AttributeDTO;
-import com.systems.integrated.wineshopbackend.repository.AttributeJPARepository;
-import com.systems.integrated.wineshopbackend.repository.CategoryJPARepository;
-import com.systems.integrated.wineshopbackend.service.intef.AttributeService;
-import com.systems.integrated.wineshopbackend.service.intef.ProductService;
+import com.management.project.eshopbackend.models.exceptions.EntityNotFoundException;
+import com.management.project.eshopbackend.models.products.Attribute;
+import com.management.project.eshopbackend.models.products.Category;
+import com.management.project.eshopbackend.models.products.DTO.AttributeDTO;
+import com.management.project.eshopbackend.repository.AttributeJPARepository;
+import com.management.project.eshopbackend.repository.CategoryJPARepository;
+import com.management.project.eshopbackend.service.intef.AttributeService;
+import com.management.project.eshopbackend.service.intef.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

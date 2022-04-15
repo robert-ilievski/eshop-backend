@@ -1,7 +1,7 @@
-package com.systems.integrated.wineshopbackend.service.intef;
+package com.management.project.eshopbackend.service.intef;
 
-import com.systems.integrated.wineshopbackend.models.products.Attribute;
-import com.systems.integrated.wineshopbackend.models.products.DTO.AttributeDTO;
+import com.management.project.eshopbackend.models.products.Attribute;
+import com.management.project.eshopbackend.models.products.DTO.AttributeDTO;
 
 import java.util.List;
 

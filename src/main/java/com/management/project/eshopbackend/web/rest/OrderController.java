@@ -6,9 +6,11 @@ import com.management.project.eshopbackend.models.orders.DTO.ResponseOrderDTO;
 import com.management.project.eshopbackend.models.orders.DTO.UpdateOrderStatusDTO;
 import com.management.project.eshopbackend.models.orders.Order;
 import com.management.project.eshopbackend.models.products.*;
+import com.management.project.eshopbackend.models.products.DTO.ProductEnoughQuantityDTO;
 import com.management.project.eshopbackend.service.intef.OrderService;
 
 
+import com.management.project.eshopbackend.service.intef.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 public class OrderController {
 
     private final OrderService orderService;
+    private final ProductService productService;
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
@@ -68,6 +71,24 @@ public class OrderController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(responseOrderDTOS, HttpStatus.OK);
+    }
+
+    @PostMapping("/makeOrder")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<?> makeOrder(@RequestBody OrderDto orderDto) {
+        try {
+            Order order = orderService.makeOrder(orderDto);
+            ResponseOrderDTO responseOrderDTO = Order.convertToDto(order);
+            return new ResponseEntity<>(responseOrderDTO, HttpStatus.OK);
+        } catch (UsernameNotFoundException | EntityNotFoundException | NotEnoughQuantityException ex) {
+            if(ex instanceof NotEnoughQuantityException){
+                ProductEnoughQuantityDTO peqDTO = new ProductEnoughQuantityDTO(
+                        false, Product.convertToDTO(productService.findById(((NotEnoughQuantityException) ex).getProductId()))
+                        );
+                return new ResponseEntity<>(peqDTO, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.OK);
+        }
     }
 
     @PutMapping("/update-status")

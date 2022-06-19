@@ -6,11 +6,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ImageStorageService {
-    public void init();
+  void init();
 
-    public int saveNewImage(MultipartFile file, Long productId);
+  int saveNewImage(MultipartFile file, Long productId);
 
-    public Resource load(String filename);
+  Resource load(String filename);
 
-    public List<String> getNumberOfImagesForProductId(Long productId);
+  List<String> getNumberOfImagesForProductId(Long productId);
 }

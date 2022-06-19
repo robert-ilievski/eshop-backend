@@ -1,4 +1,5 @@
 package com.management.project.eshopbackend;
+
 import com.management.project.eshopbackend.service.intef.ImageStorageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -17,7 +18,6 @@ public class EshopBackendApplication implements CommandLineRunner {
   public static void main(String[] args) {
     SpringApplication.run(EshopBackendApplication.class, args);
   }
-
 
   @Override
   public void run(String... args) {

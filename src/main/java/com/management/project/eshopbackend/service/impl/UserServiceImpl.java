@@ -29,29 +29,29 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserJPARepository userRepository;
+    private final BCryptPasswordEncoder encoder;
     private final EmailService emailService;
     private final AuthTokenService authTokenService;
     private final PostmanJPARepository postmanRepository;
-    private final BCryptPasswordEncoder encoder;
 
-    @Value("${wineShop.mail.url}")
+    @Value("${eShop.mail.url}")
     private String url;
 
     public static final String CREATE_USER_SUBJECT = "User created";
     public static final String CREATE_USER_CONTENT =
-            "Dear " + "%s,\n\n"
-                    + "Your account has been created. Please click on the link to change your password: \n\n"
-                    + "%s/%s,\n\n\n"
-                    + "Best regards,\n"
-                    + "WineShop mk";
+        "Dear " + "%s,\n\n"
+            + "Your account has been created. Please click on the link to change your password: \n\n"
+            + "%s/%s,\n\n\n"
+            + "Best regards,\n"
+            + "eShop mk";
 
     public static final String RESET_PASSWORD_SUBJECT = "Password reset";
     public static final String RESET_PASSWORD_CONTENT =
-            "Dear " + "%s,\n\n"
-                    + "A password reset has benn requested. Please click on the link to reset your password: \n\n"
-                    + "%s/%s,\n\n\n"
-                    + "Best regards,\n"
-                    + "WineShop mk";
+        "Dear " + "%s,\n\n"
+            + "A password reset has benn requested. Please click on the link to reset your password: \n\n"
+            + "%s/%s,\n\n\n"
+            + "Best regards,\n"
+            + "eShop mk";
 
     @Override
     public List<User> getUsers() {
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException(String.format("User with id: %s not found", userId)));
+            () -> new EntityNotFoundException(String.format("User with id: %s not found", userId)));
 
         return user;
     }
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         User user = userRepository.findUserByEmail(email).orElseThrow(
-                () -> new EntityNotFoundException(String.format("User with email: %s not found", email)));
+            () -> new EntityNotFoundException(String.format("User with email: %s not found", email)));
         return user;
     }
 
@@ -86,21 +86,21 @@ public class UserServiceImpl implements UserService {
         String newPassword = UUID.randomUUID().toString();
 
         User user = User.builder()
-                .email(userDTO.getEmail())
-                .username(userDTO.getUsername())
-                .password(encoder.encode(newPassword))
-                .name(userDTO.getName())
-                .surname(userDTO.getSurname())
-                .role(userDTO.getRole())
-                .dateCreated(LocalDateTime.now())
-                .build();
+            .email(userDTO.getEmail())
+            .username(userDTO.getUsername())
+            .password(encoder.encode(newPassword))
+            .name(userDTO.getName())
+            .surname(userDTO.getSurname())
+            .role(userDTO.getRole())
+            .dateCreated(LocalDateTime.now())
+            .build();
 
         user = userRepository.save(user);
 
         AuthToken authToken = authTokenService.createAuthToken(user.getId(), "CREATE_USER");
 
         emailService.sendEmail(CREATE_USER_SUBJECT, user.getEmail(),
-                String.format(CREATE_USER_CONTENT, user.getUsername(), url, authToken.getToken()));
+            String.format(CREATE_USER_CONTENT, user.getUsername(), url, authToken.getToken()));
         return user;
     }
 
@@ -114,14 +114,14 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = User.builder()
-                .email(userDTO.getEmail())
-                .username(userDTO.getUsername())
-                .password(encoder.encode(userDTO.getPassword()))
-                .name(userDTO.getName())
-                .surname(userDTO.getSurname())
-                .role(Role.ROLE_USER)
-                .dateCreated(LocalDateTime.now())
-                .build();
+            .email(userDTO.getEmail())
+            .username(userDTO.getUsername())
+            .password(encoder.encode(userDTO.getPassword()))
+            .name(userDTO.getName())
+            .surname(userDTO.getSurname())
+            .role(Role.ROLE_USER)
+            .dateCreated(LocalDateTime.now())
+            .build();
 
         userRepository.save(user);
         return user;
@@ -169,7 +169,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             emailService.sendEmail(RESET_PASSWORD_SUBJECT, user.getEmail(),
-                    String.format(RESET_PASSWORD_CONTENT, user.getUsername(), url, authToken.getToken()));
+                String.format(RESET_PASSWORD_CONTENT, user.getUsername(), url, authToken.getToken()));
         } catch (MessagingException exception) {
         }
     }

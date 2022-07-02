@@ -57,4 +57,38 @@ public class AttributeController {
         }
         return new ResponseEntity<>(Attribute.convertToDTO(attribute), HttpStatus.OK);
     }
+
+    @PostMapping("/createall")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createNewAttributes(@RequestBody List<AttributeDTO> attributeDTOS){
+        try {
+            for(AttributeDTO attributeDTO : attributeDTOS){
+                attributeService.create(attributeDTO);
+            }
+        }
+        catch (IllegalArgumentException ex){
+            return new ResponseEntity<>(ex.toString(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("All attributes created successfully!", HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateAttribute(@RequestBody AttributeDTO attributeDTO){
+        Attribute attribute;
+        try{
+            attribute = attributeService.update(attributeDTO);
+        }
+        catch (IllegalArgumentException ex){
+            return new ResponseEntity<>(ex.toString(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(Attribute.convertToDTO(attribute), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteAttribute(@PathVariable Long id) {
+        attributeService.delete(id);
+        return new ResponseEntity<>("Attribute with id " + id + " deleted.", HttpStatus.OK);
+    }
 }
